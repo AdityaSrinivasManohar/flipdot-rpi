@@ -15,7 +15,7 @@ ros2_topic(
     name = "topic",
     visibility = ["//visibility:public"],
     deps = [
+        "//flipdot/msgs:py_flipdotframe_msg",
         "@ros2_common_interfaces//:py_std_msgs",
-        "//flipdot/msgs:py_flipdotframe_msg"
     ],
 )

@@ -1,22 +1,23 @@
-load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary", "ros2_py_test")
+load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
     name = "flipdot_utils",
     srcs = ["utils.py"],
+    visibility = ["//visibility:public"],
     deps = [
         "//flipdot/msgs:py_flipdotframe_msg",
     ],
-    visibility = ["//visibility:public"],
 )
+
 ros2_py_binary(
     name = "test_publisher",
     srcs = ["test_publisher.py"],
     main = "test_publisher.py",
+    visibility = ["//visibility:public"],
     deps = [
+        ":flipdot_utils",
         "//flipdot/msgs:py_flipdotframe_msg",
         "@ros2_rclpy//:rclpy",
-        ":flipdot_utils"
     ],
-    visibility = ["//visibility:public"],
 )
