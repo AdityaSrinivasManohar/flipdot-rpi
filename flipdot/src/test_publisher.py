@@ -1,38 +1,57 @@
 import rclpy
 from rclpy.node import Node
 import numpy as np
-from flipdotframe_msg.msg import FlipDotFrame
+from flipdot.src.utils import FlipDotRosConverter, FlipDotFrame
 
 class FlipDotTester(Node):
     def __init__(self):
         super().__init__('flipdot_tester')
-        self.publisher_ = self.create_publisher(FlipDotFrame, 'flipdot_command', 10)
-        self.timer = self.create_timer(1.0, self.timer_callback)
-        self.width = 28 # Change to your actual width
-        self.height = 14 # Change to your actual height
+        
+        # Configure Publisher
+        self.publisher_ = self.create_publisher(
+            FlipDotFrame, 
+            'flipdot_command', 
+            10
+        )
+        
+        # Publish at 1 Hz
+        self.timer_period = 1
+        self.timer = self.create_timer(self.timer_period, self.timer_callback)
+        
+        # Display Dimensions
+        self.width = 28
+        self.height = 14
+        self.frame_count = 0
+        
+        self.get_logger().info(f'Flip-dot tester started. Grid: {self.width}x{self.height}')
 
     def timer_callback(self):
-        msg = FlipDotFrame()
-        msg.width = self.width
-        msg.height = self.height
+        y, x = np.indices((self.height, self.width))
+        grid = ((x + y + self.frame_count) % 2).astype(np.uint8)
         
-        # Create a checkerboard pattern (1s and 0s)
-        # Using numpy makes bit-packing trivial
-        grid = np.indices((self.height, self.width)).sum(axis=0) % 2
+        msg = FlipDotRosConverter.to_msg(grid)
         
-        # Pack bits: 8 pixels become 1 byte
-        # bitorder='little' ensures Bit 0 is the first pixel
-        packed_data = np.packbits(grid.flatten(), bitorder='little')
-        
-        msg.data = packed_data.tobytes()
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing flip-dot frame')
+        
+        # Increment frame for animation
+        self.frame_count += 1
+        
+        # Log every 20 frames to keep the terminal clean
+        if self.frame_count % 20 == 0:
+            self.get_logger().info(f'Published frame {self.frame_count}')
 
 def main(args=None):
     rclpy.init(args=args)
     node = FlipDotTester()
-    rclpy.spin(node)
-    rclpy.shutdown()
+    
+    try:
+        # Keep the node alive and processing callbacks
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        print("\nShutting down Flip-dot tester...")
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
