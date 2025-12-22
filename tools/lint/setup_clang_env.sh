@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-WORKSPACE_ROOT="/workspaces/template_repo"
+WORKSPACE_ROOT="/workspaces/flipdot-rpi"
 cd "$WORKSPACE_ROOT"
 LLVM_TOOLCHAIN_PATH="$(bazel info output_base)/external/toolchains_llvm++llvm+llvm_toolchain_21"
 TARGET_CLANGD_LINK="$WORKSPACE_ROOT/tools/lint/clangd"

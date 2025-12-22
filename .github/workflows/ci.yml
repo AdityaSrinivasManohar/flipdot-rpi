@@ -40,7 +40,7 @@ jobs:
           runCmd: |
             set -euo pipefail
             echo "🧹 Running linters inside DevContainer..."
-            bazel run ruff check /workspaces/template_repo
+            bazel run ruff check /workspaces/flipdot-rpi
             bazel run clang_tidy
             bazel run clang_format_check
             bazel run //tools:buildifier_check_ci
