@@ -1,5 +1,5 @@
 module(
-    name = "template_repo",
+    name = "flipdot-rpi",
     version = "0.1.0",
 )
 
