@@ -1,4 +1,9 @@
 # FlipDotFrame.msg
+
+# Standard metadata including timestamp and frame_id
+std_msgs/Header header
+
+# width and height of the flipdot
 uint32 width
 uint32 height
 

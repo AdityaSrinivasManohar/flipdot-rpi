@@ -18,7 +18,8 @@ class FlipDotSubscriber(Node):
 
     def listener_callback(self, msg):
         grid = FlipDotRosConverter.from_msg(msg)
-        
+
+        self.get_logger().info(f'Timestamp: {msg.header.stamp.sec}.{msg.header.stamp.nanosec:09d}')
         self.get_logger().info(f'Received {msg.width}x{msg.height} frame')
         
         print("\n" + "=" * (msg.width + 2))

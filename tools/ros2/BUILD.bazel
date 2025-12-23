@@ -17,5 +17,6 @@ ros2_topic(
     deps = [
         "//flipdot/msgs:py_flipdotframe_msg",
         "@ros2_common_interfaces//:py_std_msgs",
+        "@ros2_common_interfaces//:py_sensor_msgs",
     ],
 )
