@@ -21,7 +21,7 @@ class FlipDotPublisher(Node):
         self.height = 14
         self.frame_count = 0
 
-        self.get_logger().info(f'Flip-dot tester started. Grid: {self.width}x{self.height}')
+        self.get_logger().info(f'Flip-dot publisher started. Grid: {self.width}x{self.height}')
 
     def timer_callback(self):
         y, x = np.indices((self.height, self.width))
