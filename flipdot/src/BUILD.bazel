@@ -17,7 +17,17 @@ ros2_py_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":flipdot_utils",
-        "//flipdot/msgs:py_flipdotframe_msg",
+        "@ros2_rclpy//:rclpy",
+    ],
+)
+
+ros2_py_binary(
+    name = "test_subscriber",
+    srcs = ["test_subscriber.py"],
+    main = "test_subscriber.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":flipdot_utils",
         "@ros2_rclpy//:rclpy",
     ],
 )

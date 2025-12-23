@@ -1,0 +1,7 @@
+[tool.ruff]
+select = ["E", "F", "I"] 
+fixable = ["ALL"]
+line-length = 100
+
+[tool.ruff.format]
+quote-style = "single"

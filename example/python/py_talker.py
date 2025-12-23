@@ -17,7 +17,6 @@ from std_msgs.msg import String
 
 
 class MinimalPublisher(node.Node):
-
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher_ = self.create_publisher(String, 'topic', 10)
