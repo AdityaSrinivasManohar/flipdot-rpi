@@ -22,7 +22,7 @@
 	},
 
 	"containerEnv": {
-		"SSH_AUTH_SOCK": "/ssh-agent",
-        "PYTHONPATH": "/workspaces/flipdot-rpi:/opt/ros/jazzy/lib/python3.12/site-packages:/venv/lib/python3.12/site-packages"
+		"SSH_AUTH_SOCK": "/ssh-agent"
+        // "PYTHONPATH": "/workspaces/flipdot-rpi:/opt/ros/jazzy/lib/python3.12/site-packages:/venv/lib/python3.12/site-packages"
     }
 }

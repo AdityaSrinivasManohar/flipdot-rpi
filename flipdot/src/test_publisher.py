@@ -1,6 +1,7 @@
 import numpy as np
 import rclpy
 from rclpy.node import Node
+from std_msgs.msg import Header
 
 from flipdot.src.utils import FlipDotFrame, FlipDotRosConverter
 
@@ -21,6 +22,10 @@ class FlipDotPublisher(Node):
         self.height = 14
         self.frame_count = 0
 
+        # Header
+        self.msg_header = Header()
+        self.msg_header.frame_id = "flipdot_display"
+
         self.get_logger().info(f'Flip-dot publisher started. Grid: {self.width}x{self.height}')
 
     def timer_callback(self):
@@ -28,6 +33,10 @@ class FlipDotPublisher(Node):
         grid = ((x + y + self.frame_count) % 2).astype(np.uint8)
 
         msg = FlipDotRosConverter.to_msg(grid)
+
+        # Update header timestamp
+        self.msg_header.stamp = self.get_clock().now().to_msg()
+        msg.header = self.msg_header
 
         self.publisher.publish(msg)
 

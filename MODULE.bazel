@@ -1,12 +1,12 @@
 module(
-    name = "template_repo",
+    name = "flipdot-rpi",
     version = "0.1.0",
 )
 
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 bazel_dep(name = "rules_python", version = "1.6.3")
 bazel_dep(name = "rules_shell", version = "0.6.1")
-bazel_dep(name = "rules_cc", version = "0.2.11")
+bazel_dep(name = "rules_cc", version = "0.2.15")
 bazel_dep(name = "eigen", version = "5.0.0")
 
 bazel_dep(
@@ -68,8 +68,12 @@ git_override(
 bazel_dep(name = "bazel_clang_tidy")
 
 ## rules ros2
-bazel_dep(name = "fmt", version = "12.0.0")  # com_github_mvukov_rules_ros2 breaks without this
-bazel_dep(name = "com_github_mvukov_rules_ros2", version = "0.0.0-20250612-f0d04fe")
+bazel_dep(name = "com_github_mvukov_rules_ros2")
+git_override(
+    module_name = "com_github_mvukov_rules_ros2",
+    commit = "7131e46f29aad4c2903e015bd44a531783e01939",
+    remote = "https://github.com/mvukov/rules_ros2.git",
+)
 
 rules_ros2_non_module_deps = use_extension("@com_github_mvukov_rules_ros2//ros2:extensions.bzl", "non_module_deps")
 use_repo(

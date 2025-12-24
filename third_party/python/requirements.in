@@ -1,1 +1,2 @@
 numpy
+foxglove-sdk>=0.16.0
