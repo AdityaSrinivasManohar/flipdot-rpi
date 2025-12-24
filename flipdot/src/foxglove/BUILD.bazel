@@ -1,6 +1,17 @@
 load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@com_github_mvukov_rules_ros2//ros2:launch.bzl", "ros2_launch")
-load("@com_github_mvukov_rules_ros2//third_party:expand_template.bzl", "expand_template")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@py_deps//:requirements.bzl", "requirement")
+
+py_binary(
+    name = "test_foxglove",
+    srcs = ["test_foxglove.py"],
+    deps = [
+        requirement("foxglove-sdk"),
+        requirement("numpy")
+    ],
+    visibility = ["//visibility:public"],
+)
 
 ros2_py_binary(
     name = "visualizer",
@@ -15,20 +26,6 @@ ros2_py_binary(
         "@ros2_rclpy//:rclpy",
     ],
 )
-
-# expand_template(
-#     name = "data_paths_py",
-#     out = "data_paths.py",
-#     data = [
-#         ":visualizer",
-#         "@com_github_mvukov_rules_ros2//third_party/foxglove_bridge:foxglove_bridge_node",
-#     ],
-#     substitutions = {
-#         "{visualizer_node_path}": "$(rootpath :visualizer)",
-#         "{foxglove_bridge_node_path}": "$(rootpath @com_github_mvukov_rules_ros2//third_party/foxglove_bridge:foxglove_bridge_node)",
-#     },
-#     template = "data_paths.py.tpl",
-# )
 
 ros2_launch(
     name = "bridge_visualizer_launch",

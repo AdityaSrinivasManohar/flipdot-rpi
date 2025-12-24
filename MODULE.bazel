@@ -68,7 +68,6 @@ git_override(
 bazel_dep(name = "bazel_clang_tidy")
 
 ## rules ros2
-# bazel_dep(name = "fmt", version = "12.0.0")  # com_github_mvukov_rules_ros2 breaks without this
 bazel_dep(name = "com_github_mvukov_rules_ros2")
 git_override(
     module_name = "com_github_mvukov_rules_ros2",
