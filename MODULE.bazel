@@ -71,8 +71,8 @@ bazel_dep(name = "bazel_clang_tidy")
 bazel_dep(name = "com_github_mvukov_rules_ros2")
 git_override(
     module_name = "com_github_mvukov_rules_ros2",
-    remote = "https://github.com/mvukov/rules_ros2.git",
     commit = "7131e46f29aad4c2903e015bd44a531783e01939",
+    remote = "https://github.com/mvukov/rules_ros2.git",
 )
 
 rules_ros2_non_module_deps = use_extension("@com_github_mvukov_rules_ros2//ros2:extensions.bzl", "non_module_deps")

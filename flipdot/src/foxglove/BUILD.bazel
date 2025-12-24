@@ -1,19 +1,19 @@
-load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@com_github_mvukov_rules_ros2//ros2:launch.bzl", "ros2_launch")
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 ros2_py_binary(
     name = "foxglove_bridge",
     srcs = ["foxglove_bridge.py"],
     main = "foxglove_bridge.py",
+    visibility = ["//visibility:public"],
     deps = [
         requirement("foxglove-sdk"),
         requirement("numpy"),
-        "@ros2_rclpy//:rclpy",
         "@ros2_common_interfaces//:py_sensor_msgs",
+        "@ros2_rclpy//:rclpy",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ros2_py_binary(
