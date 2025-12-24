@@ -4,9 +4,9 @@ load("@rules_python//python:defs.bzl", "py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
 
 ros2_py_binary(
-    name = "test_foxglove",
-    srcs = ["test_foxglove.py"],
-    main = "test_foxglove.py",
+    name = "foxglove_bridge",
+    srcs = ["foxglove_bridge.py"],
+    main = "foxglove_bridge.py",
     deps = [
         requirement("foxglove-sdk"),
         requirement("numpy"),
@@ -29,19 +29,3 @@ ros2_py_binary(
         "@ros2_rclpy//:rclpy",
     ],
 )
-
-# ros2_launch(
-#     name = "bridge_visualizer_launch",
-#     launch_file = "bridge_visualizer_launch.py",
-#     nodes = [
-#         # ":visualizer",
-#         "@com_github_mvukov_rules_ros2//third_party/foxglove_bridge:foxglove_bridge_node",
-#     ],
-#     idl_deps = [
-#         "//flipdot/msgs:flipdotframe_msg",
-#         "@ros2_common_interfaces//:sensor_msgs",
-#     ],
-#     deps = [
-#         "@com_github_mvukov_rules_ros2//third_party/foxglove_bridge:utils",
-#     ],
-# )

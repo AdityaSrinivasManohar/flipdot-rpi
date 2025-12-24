@@ -1,8 +1,9 @@
+import foxglove
 import rclpy
+from foxglove.schemas import RawImage, Timestamp
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-import foxglove
-from foxglove.schemas import RawImage, Timestamp
+
 
 class FoxgloveBridgeNode(Node):
     def __init__(self):
