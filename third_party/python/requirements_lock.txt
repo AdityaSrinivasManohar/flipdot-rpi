@@ -4,6 +4,10 @@
 #
 #    bazel run //third_party/python:py_requirements.update
 #
+flippydot==0.1.1 \
+    --hash=sha256:017c33675a2248b2e5c91fa38b1d815200e82367c80fe7a3eb2de6ad6c3240d4 \
+    --hash=sha256:1e19c3b1dc90b9d641755ded3ce06fcfe29419152d48104ef34f61bc20526b9e
+    # via -r third_party/python/requirements.in
 foxglove-sdk==0.16.2 \
     --hash=sha256:01520ef118ca9148b297c36f65f7522d7e6344a737d25a31d243d214e962a1a1 \
     --hash=sha256:01fdfd962c8bbec1da3946457e8d844fa27665b3e8e4de85730b2fbb033f2a40 \
@@ -186,4 +190,10 @@ numpy==2.3.4 \
     --hash=sha256:fc8a63918b04b8571789688b2780ab2b4a33ab44bfe8ccea36d3eba51228c953 \
     --hash=sha256:fdebe771ca06bb8d6abce84e51dca9f7921fe6ad34a0c914541b063e9a68928b \
     --hash=sha256:fea80f4f4cf83b54c3a051f2f727870ee51e22f0248d3114b8e755d160b38cfb
-    # via -r third_party/python/requirements.in
+    # via
+    #   -r third_party/python/requirements.in
+    #   flippydot
+pyserial==3.5 \
+    --hash=sha256:3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb \
+    --hash=sha256:c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0
+    # via flippydot
