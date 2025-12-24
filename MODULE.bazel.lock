@@ -341,7 +341,7 @@
     "//tools/lint:ruff.bzl%ruff": {
       "general": {
         "bzlTransitiveDigest": "wd3Hif04Dk9m8T2xp8AGZP0PZMn/c3VCDzxN9xdquQw=",
-        "usagesDigest": "bi2nvdCLeuNGt5rnfAaj1dSTnRqsORn4BncrZ9nZ6Z0=",
+        "usagesDigest": "cUij1u7oLbUuEM9X9if3aUUBeascEM7l0HX4Nc90oPU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -370,7 +370,7 @@
     "@@com_github_mvukov_rules_ros2+//ros2:extensions.bzl%non_module_deps": {
       "general": {
         "bzlTransitiveDigest": "LaKXU3l3r1PW0zKJheeeahvL7mZXZngYj/Kw8aUVFJ4=",
-        "usagesDigest": "EKM6iQqs/YPujVFDhsRgCsxvbASlw7SWTwUVPceBq4M=",
+        "usagesDigest": "h13xNAzdojXOj7sATG3n8YHOF7J9+7cLti4sheNijf4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

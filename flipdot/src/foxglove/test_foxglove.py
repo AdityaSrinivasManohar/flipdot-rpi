@@ -1,48 +1,64 @@
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image
 import foxglove
-import time
 from foxglove.schemas import RawImage, Timestamp
-import numpy as np
 
-def main():
-    # 1. Start the Foxglove WebSocket server
-    # By default, this listens on ws://localhost:8765
-    server = foxglove.start_server(host="0.0.0.0", port=8765)
-    print("Foxglove server started on ws://localhost:8765")
-    print("Press Ctrl+C to stop.")
+class FoxgloveBridgeNode(Node):
+    def __init__(self):
+        super().__init__('foxglove_bridge_python')
+        print("Initializing Foxglove Bridge Python Node")
+        
+        # 1. Initialize Foxglove Server
+        self.fox_server = foxglove.start_server(host="0.0.0.0", port=8765)
+        self.get_logger().info("Foxglove WebSocket server started on port 8765")
 
-    try:
-        while True:
-            # 2. Log a simple dictionary (this becomes a JSON message in Foxglove)
-            foxglove.log("/test_topic", {
-                "msg": "Hello Flipdot!",
-                "count": time.time()
-            })
-            
-            # Sleep to keep the loop from hogging CPU
-            time.sleep(1.0)
+        # 2. Subscribe to ROS Image topic
+        self.subscription = self.create_subscription(
+            Image,
+            '/flipdot/image',
+            self.image_callback,
+            10  # QoS depth
+        )
+        print("Foxglove Bridge Python Node initialized")
 
-            # --- CHANNEL 1: Image Data ---
-            # Create a dummy 28x28 grayscale image (simulating a Flipdot display)
-            # data: bytes, encoding: 'mono8', width, height, step (bytes per row)
-            width, height = 28, 28
-            pixel_data = np.random.randint(0, 255, (height, width), dtype=np.uint8).tobytes()
-            
-            foxglove.log(
-                "/flipdot/image",
-                RawImage(
-                    timestamp=Timestamp.now(),
-                    frame_id="flipdot_board",
-                    width=width,
-                    height=height,
-                    encoding="mono8",
-                    step=width,
-                    data=pixel_data
-                )
+
+    def image_callback(self, msg):
+        # 3. Map ROS Image data to Foxglove RawImage
+        # Note: 'mono8' is standard for Flipdots. Adjust encoding if your ROS topic differs.
+        foxglove.log(
+            "/flipdot/image",
+            RawImage(
+                timestamp=Timestamp.now(),
+                frame_id=msg.header.frame_id,
+                width=msg.width,
+                height=msg.height,
+                encoding=msg.encoding,
+                step=msg.step,
+                data=bytes(msg.data)
             )
-            
+        )
+        self.get_logger().debug(f"Forwarded frame: {msg.width}x{msg.height}")
+
+    # def stop(self):
+    #     self.fox_server.stop()
+
+def main(args=None):
+    print("Starting Foxglove Bridge Python Node")
+    rclpy.init(args=args)
+    print("ROS2 initialized")
+    node = FoxgloveBridgeNode()
+    print("node created")
+    
+    try:
+        # Spin the ROS node to handle incoming messages
+        rclpy.spin(node)
     except KeyboardInterrupt:
-        print("\nStopping server...")
-        server.stop()
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == "__main__":
+    print("okay")
     main()
