@@ -18,6 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Build DevContainer image
         uses: devcontainers/ci@v0.3
         with:
