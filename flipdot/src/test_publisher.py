@@ -19,12 +19,12 @@ class FlipDotPublisher(Node):
 
         # Display Dimensions
         self.width = 28
-        self.height = 14
+        self.height = 7
         self.frame_count = 0
 
         # Header
         self.msg_header = Header()
-        self.msg_header.frame_id = "flipdot_display"
+        self.msg_header.frame_id = 'flipdot_display'
 
         self.get_logger().info(f'Flip-dot publisher started. Grid: {self.width}x{self.height}')
 
