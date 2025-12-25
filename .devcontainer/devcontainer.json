@@ -3,7 +3,7 @@
 	"build": {
 		"context": "..",
 		"dockerfile": "./Dockerfile",
-		"options": ["--platform=linux/amd64"]
+		"options": ["--platform=linux/arm64"]
 	},
 
 	// VScode extensions

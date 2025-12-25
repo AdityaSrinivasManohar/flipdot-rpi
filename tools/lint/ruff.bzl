@@ -8,11 +8,12 @@ def _ruff_ext_impl(ctx):
     http_archive(
         name = "ruff-linux",
         build_file_content = 'exports_files(["ruff"])',
-        strip_prefix = "ruff-x86_64-unknown-linux-gnu",
-        sha256 = "28fe06f700caf99eee235f90e6e349f48b7f9a4b0d42e3ee5b3686f9259649a3",
+        strip_prefix = "ruff-aarch64-unknown-linux-gnu",
+        sha256 = "60fc3b464a723456ba1bc8cd91d29806753c885f72e26ac67b718cee6b35aaca",
         urls = [
-            "https://github.com/astral-sh/ruff/releases/download/{0}/ruff-x86_64-unknown-linux-gnu.tar.gz".format(ruff_version),
+            "https://github.com/astral-sh/ruff/releases/download/{0}/ruff-aarch64-unknown-linux-gnu.tar.gz".format(ruff_version),
         ],
     )
 
 ruff = module_extension(implementation = _ruff_ext_impl)
+

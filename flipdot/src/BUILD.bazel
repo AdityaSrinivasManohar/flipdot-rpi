@@ -1,6 +1,7 @@
 load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 py_library(
     name = "flipdot_utils",
@@ -43,4 +44,16 @@ ros2_py_binary(
         "@ros2_rclpy//:rclpy",
         requirement("flippydot"),
     ],
+)
+
+pkg_tar(
+    name = "flipdot_package",
+    srcs = [
+        ":test_publisher",
+        ":test_subscriber",
+        ":controller",
+    ],
+    include_runfiles = True, 
+    strip_prefix = ".",
+    package_dir = "/opt/flipdot",
 )
