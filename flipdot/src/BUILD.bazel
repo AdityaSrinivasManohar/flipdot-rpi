@@ -55,5 +55,6 @@ pkg_tar(
     ],
     include_runfiles = True, 
     strip_prefix = ".",
-    package_dir = "/opt/flipdot",
+    # remove for flexibility
+    # package_dir = "/opt/flipdot",
 )
