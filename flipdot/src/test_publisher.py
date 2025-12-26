@@ -19,7 +19,7 @@ class FlipDotPublisher(Node):
 
         # Display Dimensions
         self.width = 28
-        self.height = 7
+        self.height = 14
         self.frame_count = 0
 
         # Header
