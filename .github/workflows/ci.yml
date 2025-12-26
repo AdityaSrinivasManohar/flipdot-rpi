@@ -9,34 +9,18 @@ permissions:
   packages: write
 
 jobs:
-  # Build DevContainer and warm cache
-  setup:
-    runs-on: ubuntu-24.04-arm64
-    outputs:
-      image-name: template_repo/devcontainer
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Build DevContainer image
-        uses: devcontainers/ci@v0.3
-        with:
-          imageName: template_repo/devcontainer
-          runCmd: echo "✅ DevContainer built"
-          push: never
-  
-  # Run linters inside cached DevContainer
   lint:
-    runs-on: ubuntu-24.04-arm64
-    needs: setup
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Run linter and format checks
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ${{ needs.setup.outputs.image-name }}
           runCmd: |
             set -euo pipefail
             echo "🧹 Running linters inside DevContainer..."
@@ -48,16 +32,17 @@ jobs:
 
   # Build test inside cached DevContainer
   build:
-    runs-on: ubuntu-24.04-arm64
-    needs: setup
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Test if build succeeds
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ${{ needs.setup.outputs.image-name }}
           runCmd: |
             set -euo pipefail
             echo "🛠️ Building project inside DevContainer..."
