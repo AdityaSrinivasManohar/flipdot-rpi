@@ -63,7 +63,11 @@ pkg_tar(
         "//flipdot/src/foxglove:visualizer",
         "//flipdot/src/foxglove:foxglove_bridge",
         "//flipdot/src/foxglove:run_visualizer",
-        "//flipdot/src/foxglove:run_bridge"
+        "//flipdot/src/foxglove:run_bridge",
+        "//tools/ros2:run_bag",
+        "//tools/ros2:run_topic",
+        "//tools/ros2:bag",
+        "//tools/ros2:topic",
     ],
     include_runfiles = True,
     # strip_prefix = "flipdot/src", 
