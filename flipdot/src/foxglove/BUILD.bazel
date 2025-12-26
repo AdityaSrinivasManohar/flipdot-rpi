@@ -1,5 +1,6 @@
 load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
+load("//flipdot/src:macros.bzl", "ros2_launcher")
 
 ros2_py_binary(
     name = "foxglove_bridge",
@@ -27,3 +28,6 @@ ros2_py_binary(
         "@ros2_rclpy//:rclpy",
     ],
 )
+
+ros2_launcher(name = "run_bridge", target = "foxglove_bridge")
+ros2_launcher(name = "run_visualizer", target = "visualizer")

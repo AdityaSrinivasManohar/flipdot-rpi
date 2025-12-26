@@ -1,5 +1,6 @@
 load("@com_github_mvukov_rules_ros2//ros2:bag.bzl", "ros2_bag")
 load("@com_github_mvukov_rules_ros2//ros2:topic.bzl", "ros2_topic")
+load("//flipdot/src:macros.bzl", "ros2_launcher")
 
 ros2_bag(
     name = "bag",
@@ -20,3 +21,6 @@ ros2_topic(
         "@ros2_common_interfaces//:py_std_msgs",
     ],
 )
+
+ros2_launcher(name = "run_bag", target = "bag")
+ros2_launcher(name = "run_topic", target = "topic")

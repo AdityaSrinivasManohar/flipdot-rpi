@@ -1,6 +1,8 @@
 load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load(":macros.bzl", "ros2_launcher")
 
 py_library(
     name = "flipdot_utils",
@@ -43,4 +45,50 @@ ros2_py_binary(
         "@ros2_rclpy//:rclpy",
         requirement("flippydot"),
     ],
+)
+
+ros2_launcher(name = "run_controller", target = "controller")
+ros2_launcher(name = "run_publisher", target = "test_publisher")
+ros2_launcher(name = "run_subscriber", target = "test_subscriber")
+
+pkg_tar(
+    name = "flipdot_package",
+    srcs = [
+        ":test_publisher",
+        ":test_subscriber",
+        ":run_publisher",
+        ":run_subscriber"
+    ],
+    include_runfiles = True,
+)
+
+pkg_tar(
+    name = "flipdot_controller_package",
+    srcs = [
+        ":controller",
+        ":run_controller",
+    ],
+    include_runfiles = True,
+)
+
+pkg_tar(
+    name = "ros2_package",
+    srcs = [
+        "//tools/ros2:run_bag",
+        "//tools/ros2:run_topic",
+        "//tools/ros2:bag",
+        "//tools/ros2:topic",
+    ],
+    include_runfiles = True,
+)
+
+pkg_tar(
+    name = "foxglove_bridge_package",
+    srcs = [
+        "//flipdot/src/foxglove:visualizer",
+        "//flipdot/src/foxglove:foxglove_bridge",
+        "//flipdot/src/foxglove:run_visualizer",
+        "//flipdot/src/foxglove:run_bridge",
+    ],
+    include_runfiles = True,
 )

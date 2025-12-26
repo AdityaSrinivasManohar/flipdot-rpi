@@ -6,7 +6,6 @@ import serial
 from flippydot import Panel
 from rclpy.node import Node
 
-# Assuming these are in your workspace
 from flipdot.src.utils import FlipDotFrame, FlipDotRosConverter
 
 
@@ -70,7 +69,6 @@ class FlipDotHardwareNode(Node):
     def command_callback(self, msg):
         """Callback triggered when a new FlipDotFrame arrives."""
         try:
-            # Use your converter to turn the ROS msg back into a NumPy grid
             grid = FlipDotRosConverter.from_msg(msg)
             
             # Send the grid directly to the physical hardware
