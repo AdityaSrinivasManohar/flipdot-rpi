@@ -47,6 +47,18 @@ ros2_py_binary(
     ],
 )
 
+ros2_py_binary(
+    name = "flipdot_manager",
+    srcs = ["flipdot_manager.py"],
+    main = "flipdot_manager.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":flipdot_utils",
+        "//flipdot/src/states:states",
+        "@ros2_rclpy//:rclpy",
+    ],
+)
+
 ros2_launcher(name = "run_controller", target = "controller")
 ros2_launcher(name = "run_publisher", target = "test_publisher")
 ros2_launcher(name = "run_subscriber", target = "test_subscriber")
