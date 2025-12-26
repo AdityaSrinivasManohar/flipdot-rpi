@@ -53,8 +53,9 @@ pkg_tar(
         ":test_subscriber",
         ":controller",
     ],
-    include_runfiles = True, 
-    strip_prefix = ".",
+    include_runfiles = True,
+    # strip_prefix = "flipdot/src", 
+    # package_dir = "flipdot_app",
     # remove for flexibility
     # package_dir = "/opt/flipdot",
 )
