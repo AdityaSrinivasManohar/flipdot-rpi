@@ -10,7 +10,7 @@ class FlipDotFSM(Node):
         super().__init__('flipdot_fsm')
         self.publisher = self.create_publisher(FlipDotFrame, '/flipdot/command', 10)
         
-        # 1. Initialize States
+        # Initialize States
         self.states = {
             "CLOCK": ClockState(28, 14, self.get_logger())
         }
@@ -34,7 +34,7 @@ class FlipDotFSM(Node):
         elapsed = (now - self.state_start_time).nanoseconds / 1e9
 
         # # --- FSM TRANSITION LOGIC ---
-        # # Example: Switch every 15 seconds
+        # At some point we change this to some key press or time based logic
         # if self.current_state_key == "CLOCK" and elapsed > 15.0:
         #     self.transition_to("TEST")
         # elif self.current_state_key == "TEST" and elapsed > 10.0:
@@ -47,7 +47,7 @@ class FlipDotFSM(Node):
         self.frame_count += 1
 
 def main(args=None):
-    print("Initilizing")
+    print("Initializing")
     rclpy.init(args=args)
     node = FlipDotFSM()
     rclpy.spin(node)
