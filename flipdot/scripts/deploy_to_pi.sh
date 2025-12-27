@@ -12,6 +12,7 @@ NC='\033[0m' # No Color
 PI_USER="adsm"
 PI_HOST="10.0.0.192"
 PI_BASE_DIR="/home/adsm/flipdot"
+SYSTEMD_LOCAL_DIR="/workspaces/flipdot-rpi/flipdot/systemd"
 
 # List of tarballs to scp
 TARBALLS=(
@@ -21,53 +22,119 @@ TARBALLS=(
     "/workspaces/flipdot-rpi/bazel-bin/flipdot/src/foxglove_bridge_package.tar"
 )
 
-echo -e "${BLUE}🚀 Starting Deployment to $PI_HOST...${NC}"
+# --- Argument Parsing ---
+# Default to true for both if no args provided
+DEPLOY_PACKAGES=true
+DEPLOY_SYSTEMD=true
+CLEAN_ONLY=false
 
-for TAR in "${TARBALLS[@]}"; do
-    if [ ! -f "$TAR" ]; then
-        echo -e "${RED}❌ Local file missing: $TAR${NC}"
-        exit 1
-    fi
+case "$1" in
+    "--systemd")
+        DEPLOY_PACKAGES=false
+        DEPLOY_SYSTEMD=true
+        echo -e "${YELLOW}Mode: Systemd services only.${NC}"
+        ;;
+    "--packages")
+        DEPLOY_PACKAGES=true
+        DEPLOY_SYSTEMD=false
+        echo -e "${YELLOW}Mode: Packages only.${NC}"
+        ;;
+    "--clean")
+        CLEAN_ONLY=true
+        DEPLOY_PACKAGES=false
+        DEPLOY_SYSTEMD=false
+        echo -e "${RED}Mode: Full Systemd Cleanup.${NC}"
+        ;;
+    *)
+        echo -e "${BLUE}Mode: Full Deployment (Packages + Systemd).${NC}"
+        ;;
+esac
 
-    FILENAME=$(basename "$TAR")
-    FOLDER_NAME="${FILENAME%.tar}"
-    TARGET_DIR="$PI_BASE_DIR/$FOLDER_NAME"
+# --- 1. Cleanup Block ---
+if [ "$CLEAN_ONLY" = true ]; then
+    echo -e "${RED}⚠️  Cleaning all systemd service files from $PI_HOST...${NC}"
+    ssh -t "$PI_USER@$PI_HOST" "
+        echo -e '${YELLOW}Stopping and disabling services...${NC}'
+        sudo systemctl stop flipdot-rpi.target 2>/dev/null || true
+        sudo systemctl disable flipdot-rpi.target 2>/dev/null || true
+        sudo systemctl disable 'flipdot-*' 2>/dev/null || true
+        sudo systemctl disable 'flipdot_*' 2>/dev/null || true
+        
+        echo -e '${YELLOW}Removing files from /etc/systemd/system/...${NC}'
+        sudo rm -f /etc/systemd/system/flipdot-*
+        sudo rm -f /etc/systemd/system/flipdot_*
+        sudo rm -f /etc/systemd/system/foxglove-bridge.service
+        
+        sudo systemctl daemon-reload
+        sudo systemctl reset-failed
+        echo -e '${GREEN}✅ Systemd files cleared!${NC}'
+    "
+    exit 0
+fi
 
-    echo -e "${BLUE}--------------------------------------------------${NC}"
-    echo -e "${GREEN}📦 Package:${NC} $FOLDER_NAME"
+# --- 2. Package Deployment Block ---
+if [ "$DEPLOY_PACKAGES" = true ]; then
+    echo -e "${BLUE}🚀 Starting Package Deployment to $PI_HOST...${NC}"
 
-    # Mac 'md5' vs Linux 'md5sum' check
-    if command -v md5sum >/dev/null 2>&1; then
-        LOCAL_MD5=$(md5sum "$TAR" | cut -d' ' -f1)
-    else
-        LOCAL_MD5=$(md5 -q "$TAR")
-    fi
+    for TAR in "${TARBALLS[@]}"; do
+        if [ ! -f "$TAR" ]; then
+            echo -e "${RED}❌ Local file missing: $TAR${NC}"
+            exit 1
+        fi
 
-    # We use a single SSH call to check both existence and the checksum to save time
-    REMOTE_CHECK=$(ssh "$PI_USER@$PI_HOST" "if [ -f '$TARGET_DIR/$FILENAME' ]; then md5sum '$TARGET_DIR/$FILENAME' | cut -d' ' -f1; else echo 'MISSING'; fi")
+        FILENAME=$(basename "$TAR")
+        FOLDER_NAME="${FILENAME%.tar}"
+        TARGET_DIR="$PI_BASE_DIR/$FOLDER_NAME"
 
-    if [ "$LOCAL_MD5" == "$REMOTE_CHECK" ]; then
-        echo -e "  ${NC}✨ MD5 match ($LOCAL_MD5). ${GREEN}Skipping upload and extraction.${NC}"
-        continue
-    fi
+        echo -e "${BLUE}--------------------------------------------------${NC}"
+        echo -e "${GREEN}📦 Package:${NC} $FOLDER_NAME"
 
-    # Proceed with update if MD5 differs or file is missing
-    echo -e "  ${YELLOW}🔄 Change detected or file missing. Updating...${NC}"
+        if command -v md5sum >/dev/null 2>&1; then
+            LOCAL_MD5=$(md5sum "$TAR" | cut -d' ' -f1)
+        else
+            LOCAL_MD5=$(md5 -q "$TAR")
+        fi
 
-    # Remove the old folder contents before proceeding
-    echo -e "  ${RED}🧹 Cleaning remote folder: $TARGET_DIR${NC}"
-    ssh "$PI_USER@$PI_HOST" "rm -rf '$TARGET_DIR' && mkdir -p '$TARGET_DIR'"
-    
-    ssh "$PI_USER@$PI_HOST" "mkdir -p $TARGET_DIR"
-    
-    echo -e "  ${YELLOW}→ Uploading $FILENAME...${NC}"
-    scp "$TAR" "$PI_USER@$PI_HOST:$TARGET_DIR/"
+        REMOTE_CHECK=$(ssh "$PI_USER@$PI_HOST" "if [ -f '$TARGET_DIR/$FILENAME' ]; then md5sum '$TARGET_DIR/$FILENAME' | cut -d' ' -f1; else echo 'MISSING'; fi")
 
-    echo -e "  ${YELLOW}→ Extracting...${NC}"
-    ssh "$PI_USER@$PI_HOST" "cd $TARGET_DIR && tar -xf $FILENAME"
-    
-    echo -e "  ${GREEN}✅ Successfully updated $FOLDER_NAME${NC}"
-done
+        if [ "$LOCAL_MD5" == "$REMOTE_CHECK" ]; then
+            echo -e "  ${NC}✨ MD5 match ($LOCAL_MD5). ${GREEN}Skipping upload.${NC}"
+            continue
+        fi
+
+        echo -e "  ${YELLOW}🔄 Change detected. Updating...${NC}"
+        echo -e "  ${RED}🧹 Cleaning remote folder: $TARGET_DIR${NC}"
+        ssh "$PI_USER@$PI_HOST" "rm -rf '$TARGET_DIR' && mkdir -p '$TARGET_DIR'"
+        
+        echo -e "  ${YELLOW}→ Uploading $FILENAME...${NC}"
+        scp "$TAR" "$PI_USER@$PI_HOST:$TARGET_DIR/"
+
+        echo -e "  ${YELLOW}→ Extracting...${NC}"
+        ssh "$PI_USER@$PI_HOST" "cd $TARGET_DIR && tar -xf $FILENAME"
+        echo -e "  ${GREEN}✅ Updated $FOLDER_NAME${NC}"
+    done
+fi
+
+# --- 3. Systemd Deployment Block ---
+if [ "$DEPLOY_SYSTEMD" = true ]; then
+    echo -e "${BLUE}==================================================${NC}"
+    echo -e "${BLUE}⚙️  Deploying Systemd Services...${NC}"
+
+    ssh "$PI_USER@$PI_HOST" "mkdir -p ~/systemd_tmp"
+    scp $SYSTEMD_LOCAL_DIR/* "$PI_USER@$PI_HOST:~/systemd_tmp/"
+
+    echo -e "${YELLOW}🔄 Registering services and reloading systemd...${NC}"
+    ssh -t "$PI_USER@$PI_HOST" "
+        sudo mv ~/systemd_tmp/* /etc/systemd/system/
+        sudo rm -rf ~/systemd_tmp
+        sudo systemctl daemon-reload
+        sudo systemctl enable flipdot-rpi.target
+        echo -e '${GREEN}✅ Services registered successfully!${NC}'
+        
+        echo -e '${BLUE}📊 Current Dependency Tree for flipdot-rpi.target:${NC}'
+        systemctl list-dependencies flipdot-rpi.target
+    "
+fi
 
 echo -e "${BLUE}--------------------------------------------------${NC}"
-echo -e "${GREEN}✨ Deployment sync complete!${NC}"
+echo -e "${GREEN}✨ Sync complete!${NC}"

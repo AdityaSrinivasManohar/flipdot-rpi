@@ -1,0 +1,20 @@
+[Unit]
+Description=Flipdot Controller Service
+
+PartOf=flipdot.target
+After=network.target
+
+[Service]
+User=adsm
+WorkingDirectory=/home/adsm/flipdot/flipdot_controller_package
+ExecStart=/home/adsm/flipdot/flipdot_controller_package/run_controller.sh
+# Automatically restart the service if it crashes
+Restart=always
+RestartSec=5
+# Log output to the system journal
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+# This tells the system to start the service during a normal boot
+WantedBy=flipdot.target
