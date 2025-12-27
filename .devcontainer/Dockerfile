@@ -5,6 +5,7 @@ RUN apt-get update && \
     git \
     nano \
     curl \
+    clang \
     libxml2 libxml2-dev zlib1g-dev \ 
     python3 \
     python3-pip \

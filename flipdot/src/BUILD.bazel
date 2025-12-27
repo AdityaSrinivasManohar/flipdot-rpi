@@ -62,6 +62,7 @@ ros2_py_binary(
 ros2_launcher(name = "run_controller", target = "controller")
 ros2_launcher(name = "run_publisher", target = "test_publisher")
 ros2_launcher(name = "run_subscriber", target = "test_subscriber")
+ros2_launcher(name = "run_flipdot_manager", target = "flipdot_manager")
 
 pkg_tar(
     name = "flipdot_package",
@@ -69,7 +70,9 @@ pkg_tar(
         ":test_publisher",
         ":test_subscriber",
         ":run_publisher",
-        ":run_subscriber"
+        ":run_subscriber",
+        ":flipdot_manager",
+        ":run_flipdot_manager",
     ],
     include_runfiles = True,
 )
