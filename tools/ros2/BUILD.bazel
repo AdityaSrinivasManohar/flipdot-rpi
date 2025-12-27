@@ -22,5 +22,12 @@ ros2_topic(
     ],
 )
 
-ros2_launcher(name = "run_bag", target = "bag")
-ros2_launcher(name = "run_topic", target = "topic")
+ros2_launcher(
+    name = "run_bag",
+    target = "bag",
+)
+
+ros2_launcher(
+    name = "run_topic",
+    target = "topic",
+)
