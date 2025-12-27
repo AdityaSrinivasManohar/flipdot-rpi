@@ -1,7 +1,7 @@
 [Unit]
 Description=Runs the Foxglove Bridge
 
-PartOf=flipdot.target
+PartOf=flipdot-rpi.target
 After=network.target
 
 [Service]
@@ -17,4 +17,4 @@ StandardError=inherit
 
 [Install]
 # This tells the system to start the service during a normal boot
-WantedBy=flipdot.target
+WantedBy=flipdot-rpi.target
