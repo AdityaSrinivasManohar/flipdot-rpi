@@ -1,0 +1,6 @@
+[Unit]
+Description=flipdot-rpi target runs all nodes required for the flipdot to work
+Wants=flipdot-controller.service flipdot-visualizer.service foxglove-bridge.service flipdot-fsm.service
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+[Unit]
+Description=Converts the flipdot message into an image to display over foxglove
+
+PartOf=flipdot-rpi.target
+After=network.target
+
+[Service]
+User=adsm
+WorkingDirectory=/home/adsm/flipdot/foxglove_bridge_package
+ExecStart=/home/adsm/flipdot/foxglove_bridge_package/run_visualizer.sh
+# Automatically restart the service if it crashes
+Restart=always
+RestartSec=5
+# Log output to the system journal
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+# This tells the system to start the service during a normal boot
+WantedBy=flipdot-rpi.target
