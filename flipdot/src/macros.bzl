@@ -1,3 +1,5 @@
+"""Wrapper macros for ROS2 launchers which find the correct ros2 dependency paths."""
+
 def ros2_launcher(name, target):
     native.genrule(
         name = name,
@@ -22,4 +24,4 @@ exec "$$DIR/""" + target + """" "$$@"
 EOF
 """,
         executable = True,
-    ) 
+    )

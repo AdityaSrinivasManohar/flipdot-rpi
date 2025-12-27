@@ -1,7 +1,7 @@
 load("@com_github_mvukov_rules_ros2//ros2:py_defs.bzl", "ros2_py_binary")
 load("@py_deps//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", "py_library")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_python//python:defs.bzl", "py_library")
 load(":macros.bzl", "ros2_launcher")
 
 py_library(
@@ -54,25 +54,40 @@ ros2_py_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":flipdot_utils",
-        "//flipdot/src/states:states",
+        "//flipdot/src/states",
         "@ros2_rclpy//:rclpy",
     ],
 )
 
-ros2_launcher(name = "run_controller", target = "controller")
-ros2_launcher(name = "run_publisher", target = "test_publisher")
-ros2_launcher(name = "run_subscriber", target = "test_subscriber")
-ros2_launcher(name = "run_flipdot_manager", target = "flipdot_manager")
+ros2_launcher(
+    name = "run_controller",
+    target = "controller",
+)
+
+ros2_launcher(
+    name = "run_publisher",
+    target = "test_publisher",
+)
+
+ros2_launcher(
+    name = "run_subscriber",
+    target = "test_subscriber",
+)
+
+ros2_launcher(
+    name = "run_flipdot_manager",
+    target = "flipdot_manager",
+)
 
 pkg_tar(
     name = "flipdot_package",
     srcs = [
-        ":test_publisher",
-        ":test_subscriber",
-        ":run_publisher",
-        ":run_subscriber",
         ":flipdot_manager",
         ":run_flipdot_manager",
+        ":run_publisher",
+        ":run_subscriber",
+        ":test_publisher",
+        ":test_subscriber",
     ],
     include_runfiles = True,
 )
@@ -89,9 +104,9 @@ pkg_tar(
 pkg_tar(
     name = "ros2_package",
     srcs = [
+        "//tools/ros2:bag",
         "//tools/ros2:run_bag",
         "//tools/ros2:run_topic",
-        "//tools/ros2:bag",
         "//tools/ros2:topic",
     ],
     include_runfiles = True,
@@ -100,10 +115,10 @@ pkg_tar(
 pkg_tar(
     name = "foxglove_bridge_package",
     srcs = [
-        "//flipdot/src/foxglove:visualizer",
         "//flipdot/src/foxglove:foxglove_bridge",
-        "//flipdot/src/foxglove:run_visualizer",
         "//flipdot/src/foxglove:run_bridge",
+        "//flipdot/src/foxglove:run_visualizer",
+        "//flipdot/src/foxglove:visualizer",
     ],
     include_runfiles = True,
 )

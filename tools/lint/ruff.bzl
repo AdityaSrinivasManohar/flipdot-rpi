@@ -16,4 +16,3 @@ def _ruff_ext_impl(ctx):
     )
 
 ruff = module_extension(implementation = _ruff_ext_impl)
-

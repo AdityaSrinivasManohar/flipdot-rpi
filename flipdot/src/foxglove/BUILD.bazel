@@ -29,5 +29,12 @@ ros2_py_binary(
     ],
 )
 
-ros2_launcher(name = "run_bridge", target = "foxglove_bridge")
-ros2_launcher(name = "run_visualizer", target = "visualizer")
+ros2_launcher(
+    name = "run_bridge",
+    target = "foxglove_bridge",
+)
+
+ros2_launcher(
+    name = "run_visualizer",
+    target = "visualizer",
+)
