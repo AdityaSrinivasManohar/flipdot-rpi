@@ -2,6 +2,8 @@ import rclpy
 from rclpy.node import Node
 
 from flipdot.src.states.clock_state import ClockState
+from flipdot.src.states.text_scroll_state import TextScrollState
+from flipdot.src.states.weather_state import WeatherState
 from flipdot.src.utils import FlipDotFrame, FlipDotRosConverter
 
 
@@ -12,10 +14,12 @@ class FlipDotFSM(Node):
         
         # Initialize States
         self.states = {
-            "CLOCK": ClockState(28, 14, self.get_logger())
+            "CLOCK": ClockState(28, 14, self.get_logger()),
+            "WEATHER": WeatherState(28, 14, self.get_logger()),
+            "TEXT_SCROLL_HELLO": TextScrollState(23, 14, "HELLO", self.get_logger())
         }
         
-        self.current_state_key = "CLOCK"
+        self.current_state_key = "WEATHER"
         self.state = self.states[self.current_state_key]
         self.state_start_time = self.get_clock().now()
         

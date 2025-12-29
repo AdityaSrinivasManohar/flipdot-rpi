@@ -6,6 +6,8 @@ py_library(
     srcs = [
         "base_state.py",
         "clock_state.py",
+        "weather_state.py",
+        "text_scroll_state.py",
     ],
     data = ["//flipdot/fonts"],
     visibility = ["//visibility:public"],
@@ -13,5 +15,6 @@ py_library(
         "@rules_python//python/runfiles",
         requirement("pillow"),
         requirement("numpy"),
+        requirement("requests"),
     ],
 )

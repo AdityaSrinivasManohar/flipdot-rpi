@@ -342,7 +342,7 @@
   "moduleExtensions": {
     "//tools/lint:ruff.bzl%ruff": {
       "general": {
-        "bzlTransitiveDigest": "kPPuyMOzr86F3x2oYP6vBDtg+Bp6mZiL6ZPFwDqgeD0=",
+        "bzlTransitiveDigest": "iNtZ++dmrpmLknOb/ekqX4NnZP4eaLh6hVu3cGERCxE=",
         "usagesDigest": "cUij1u7oLbUuEM9X9if3aUUBeascEM7l0HX4Nc90oPU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
