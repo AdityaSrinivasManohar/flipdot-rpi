@@ -12,7 +12,7 @@ class FlipDotFSM(Node):
         super().__init__('flipdot_fsm')
         self.publisher = self.create_publisher(FlipDotFrame, '/flipdot/command', 10)
         
-        demo = "Welcome to the demo, firstly you can check out the clock"
+        demo = "Welcome! lets check out the clock"
         demo_next = "Next the current weather"
 
         # Initialize States
