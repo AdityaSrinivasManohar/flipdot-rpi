@@ -1,7 +1,9 @@
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from python.runfiles import runfiles
+
 from .base_state import FlipDotState
+
 
 class StaticTextState(FlipDotState):
     def __init__(self, width, height, text, logger):
