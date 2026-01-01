@@ -84,7 +84,12 @@ class WeatherState(FlipDotState):
     def _update_weather(self):
         try:
             url = "https://api.open-meteo.com/v1/forecast"
-            params = {"latitude": self.lat, "longitude": self.lon, "current": "temperature_2m,weather_code", "temperature_unit": "celsius"}
+            params = {
+                "latitude": self.lat,
+                "longitude": self.lon,
+                "current": "temperature_2m,weather_code",
+                "temperature_unit": "celsius"
+            }
             response = requests.get(url, params=params, timeout=5).json()
             current = response.get("current", {})
             self.temp = f"{int(round(current.get('temperature_2m', 0)))}"
