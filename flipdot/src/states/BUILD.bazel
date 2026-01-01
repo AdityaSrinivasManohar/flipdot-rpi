@@ -8,6 +8,7 @@ py_library(
         "clock_state.py",
         "weather_state.py",
         "text_scroll_state.py",
+        "static_text_state.py",
     ],
     data = ["//flipdot/fonts"],
     visibility = ["//visibility:public"],
