@@ -46,5 +46,5 @@ jobs:
           runCmd: |
             set -euo pipefail
             echo "🛠️ Building project inside DevContainer..."
-            bazel build //flipdot/... -//flipdot/src:flipdot_controller_package -//flipdot/src:ros2_package -//flipdot/src:foxglove_bridge_package -/flipdot/src:flipdot_package
+            bazel build -- //flipdot/... -//flipdot/src:flipdot_controller_package -//flipdot/src:ros2_package -//flipdot/src:foxglove_bridge_package -//flipdot/src:flipdot_package
             echo "✅ Build succeeded!"
